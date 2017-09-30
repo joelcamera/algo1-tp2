@@ -1,0 +1,25 @@
+\begin{tipo}{Nivel}{}
+	\observador{ancho}{n: Nivel}{\ent}
+	\observador{alto}{n: Nivel}{\ent}
+	\observador{turno}{n: Nivel}{\ent}
+	\observador{soles}{n: Nivel}{\ent}
+	\observador{flores}{n: Nivel}{[(Flor, Posicion, Vida)]}
+	\observador{vampiros}{n: Nivel}{[(Vampiro, Posicion, Vida)]}
+	\observador{spawning}{n: Nivel}{[(Vampiro, \ent, \ent)]}
+	\invariante[valoresRazonables]{ancho(n) > 0 \land alto(n) > 0 \land soles(n) \geq 0 \land turno(n) \geq 0}
+	
+	\invariante[posicionesValidas]{((\forall
+	\selector{f}{flores(n)})\ 0 < fila(f) \leq alto(n)
+	\land 0 < columna(f) \leq ancho(n)) \land ((\forall
+	\selector{v}{vampiros(n)})\ 0 < fila(v) \leq alto(n)
+	\land 0 \leq columna(v) \leq ancho(n))}
+	
+	\invariante[spawningOrdenado]{(\forall
+	\selector{i}{[0..|spawning(n)|-1))}\ (\trd{spawning(n)_{i}} <
+	\trd{spawning(n)_{i+1}}) \lor (\trd{spawning(n)_{i}} == \trd{spawning(n)_{i+1}} \land \sgd{spawning(n)_{i}} \leq
+	\sgd{spawning(n)_{i+1}})}
+	
+	\invariante[necesitoMiEspacio]{(\forall i,j \selec [0..|flores(n)|), i \neq j) sgd(flores(n)_i) \neq sgd(flores(n)_j)}
+	\invariante[vivosPeroNoTanto]{vidaFloresOk(flores(n)) \land vidaVampirosOk(vampiros(n))}
+	\invariante[spawneanBien]{(\forall t \selec spawning(n))sgd(t)\geq 1 \land sgd(t) \leq alto(n) \land trd(t)\geq 0}
+\end{tipo}
